@@ -6,11 +6,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.view.*;
+import android.widget.*;
 
 import java.util.List;
 
@@ -27,8 +24,18 @@ public class NoteActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Spinner spinner = findViewById(R.id.spinner_course);
+        loadNoteInfo();
+        setSpinnerInfo();
+        setTextFields();
+    }
 
+    private void loadNoteInfo() {
+        Intent intent = getIntent();
+        note = intent.getParcelableExtra(NOTE_INFO);
+    }
+
+    private void setSpinnerInfo() {
+        Spinner spinner = findViewById(R.id.spinner_course);
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
 
         ArrayAdapter<CourseInfo> adapter = new ArrayAdapter<>(
@@ -38,8 +45,17 @@ public class NoteActivity extends AppCompatActivity {
 
         spinner.setAdapter(adapter);
 
-        Intent intent = getIntent();
-        note = intent.getParcelableExtra(NOTE_INFO);
+        int index = courses.indexOf(note.getCourse());
+        spinner.setSelection(index);
+    }
+
+    private void setTextFields() {
+        EditText title = findViewById(R.id.note_title);
+        EditText details = findViewById(R.id.note_detail);
+
+
+        title.setText(note.getTitle());
+        details.setText(note.getText());
     }
 
     @Override
