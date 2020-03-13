@@ -1,5 +1,6 @@
 package com.vcs.notes;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,9 @@ import android.widget.SpinnerAdapter;
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
+
+    public static final String NOTE_INFO = "com.vcs.notes.NoteActivity.note_info";
+    private NoteInfo note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,9 @@ public class NoteActivity extends AppCompatActivity {
                 courses);
 
         spinner.setAdapter(adapter);
+
+        Intent intent = getIntent();
+        note = intent.getParcelableExtra(NOTE_INFO);
     }
 
     @Override

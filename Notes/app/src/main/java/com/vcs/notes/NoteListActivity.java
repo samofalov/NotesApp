@@ -18,6 +18,9 @@ import java.util.List;
 
 public class NoteListActivity extends AppCompatActivity {
 
+
+    private ListView notesListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +38,7 @@ public class NoteListActivity extends AppCompatActivity {
             }
         });
 
-        ListView listView = findViewById(R.id.note_list);
+        notesListView = findViewById(R.id.note_list);
 
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
 
@@ -45,12 +48,17 @@ public class NoteListActivity extends AppCompatActivity {
                 notes
         );
 
-        listView.setAdapter(adapter);
+        notesListView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        notesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(NoteListActivity.this, NoteActivity.class);
+
+                // Passing information with intent
+                NoteInfo noteInfo = (NoteInfo) notesListView.getItemAtPosition(position);
+
+                intent.putExtra(NoteActivity.NOTE_INFO, noteInfo);
 
                 startActivity(intent);
             }
