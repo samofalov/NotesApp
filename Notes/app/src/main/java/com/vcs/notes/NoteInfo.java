@@ -4,9 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public final class NoteInfo implements Parcelable {
+    private int id;
     private CourseInfo course;
     private String title;
     private String text;
+
+    public int getId() {
+        return id;
+    }
 
     public CourseInfo getCourse() {
         return course;
@@ -32,7 +37,8 @@ public final class NoteInfo implements Parcelable {
         this.text = text;
     }
 
-    public NoteInfo(CourseInfo course, String title, String text) {
+    public NoteInfo(int id, CourseInfo course, String title, String text) {
+        this.id = id;
         this.course = course;
         this.title = title;
         this.text = text;
@@ -40,6 +46,7 @@ public final class NoteInfo implements Parcelable {
 
 
     protected NoteInfo(Parcel parcel) {
+        id = parcel.readInt();
         title = parcel.readString();
         text = parcel.readString();
         course = parcel.readParcelable(CourseInfo.class.getClassLoader());
@@ -89,6 +96,7 @@ public final class NoteInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         // Writing information into parcel
+        parcel.writeInt(id);
         parcel.writeString(title);
         parcel.writeString(text);
         parcel.writeParcelable(course, 0);

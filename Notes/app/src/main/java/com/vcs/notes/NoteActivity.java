@@ -38,14 +38,6 @@ public class NoteActivity extends AppCompatActivity {
         note = intent.getParcelableExtra(NOTE_INFO);
 
         isNewNote = (note == null);
-
-        /* longer logic
-        if(note == null){
-            isNewNote = true;
-        } else {
-            isNewNote = false;
-        }
-        */
     }
 
     private void setSpinnerInfo() {
@@ -96,6 +88,21 @@ public class NoteActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        saveNote();
+    }
+
+    private void saveNote() {
+        note.setCourse((CourseInfo) spinner.getSelectedItem());
+        note.setTitle(title.getText().toString());
+        note.setText(details.getText().toString());
+
+        DataManager.getInstance().updateNote(note);
     }
 
     private void sendEmail() {
