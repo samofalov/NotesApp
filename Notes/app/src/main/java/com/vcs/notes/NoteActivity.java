@@ -15,6 +15,10 @@ public class NoteActivity extends AppCompatActivity {
 
     public static final String NOTE_INFO = "com.vcs.notes.NoteActivity.note_info";
     private NoteInfo note;
+    private boolean isNewNote;
+    private EditText title;
+    private EditText details;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +36,20 @@ public class NoteActivity extends AppCompatActivity {
     private void loadNoteInfo() {
         Intent intent = getIntent();
         note = intent.getParcelableExtra(NOTE_INFO);
+
+        isNewNote = (note == null);
+
+        /* longer logic
+        if(note == null){
+            isNewNote = true;
+        } else {
+            isNewNote = false;
+        }
+        */
     }
 
     private void setSpinnerInfo() {
-        Spinner spinner = findViewById(R.id.spinner_course);
+        spinner = findViewById(R.id.spinner_course);
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
 
         ArrayAdapter<CourseInfo> adapter = new ArrayAdapter<>(
@@ -45,17 +59,20 @@ public class NoteActivity extends AppCompatActivity {
 
         spinner.setAdapter(adapter);
 
-        int index = courses.indexOf(note.getCourse());
-        spinner.setSelection(index);
+        if(!isNewNote) {
+            int index = courses.indexOf(note.getCourse());
+            spinner.setSelection(index);
+        }
     }
 
     private void setTextFields() {
-        EditText title = findViewById(R.id.note_title);
-        EditText details = findViewById(R.id.note_detail);
+        title = findViewById(R.id.note_title);
+        details = findViewById(R.id.note_detail);
 
-
-        title.setText(note.getTitle());
-        details.setText(note.getText());
+        if(!isNewNote) {
+            title.setText(note.getTitle());
+            details.setText(note.getText());
+        }
     }
 
     @Override
@@ -73,10 +90,25 @@ public class NoteActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_send_email) {
+            sendEmail();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendEmail() {
+        CourseInfo courseInfo = (CourseInfo) spinner.getSelectedItem();
+
+        String subject = courseInfo.toString() + "|" + title.getText().toString();
+        String text = details.getText().toString();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc2822");
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+
+        startActivity(intent);
     }
 }
