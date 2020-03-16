@@ -146,8 +146,11 @@ public class DataManager {
     }
 
 
-    public void createNote(){
-        // TODO
+    public NoteInfo createNote(){
+        NoteInfo newNote = new NoteInfo(mNotes.size(), null, null, null);
+        mNotes.add(newNote);
+
+        return newNote;
     }
 
     public void updateNote(NoteInfo infoToUpdate) {

@@ -19,6 +19,7 @@ public class NoteActivity extends AppCompatActivity {
     private EditText title;
     private EditText details;
     private Spinner spinner;
+    private boolean isCancelled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,8 @@ public class NoteActivity extends AppCompatActivity {
         note = intent.getParcelableExtra(NOTE_INFO);
 
         isNewNote = (note == null);
+
+
     }
 
     private void setSpinnerInfo() {
@@ -85,6 +88,9 @@ public class NoteActivity extends AppCompatActivity {
         if (id == R.id.action_send_email) {
             sendEmail();
             return true;
+        } else if (id == R.id.action_cancel) {
+            isCancelled = true;
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -94,10 +100,13 @@ public class NoteActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        saveNote();
+        if (!isCancelled) saveNote();
     }
 
     private void saveNote() {
+
+        if(isNewNote) note = DataManager.getInstance().createNote();
+
         note.setCourse((CourseInfo) spinner.getSelectedItem());
         note.setTitle(title.getText().toString());
         note.setText(details.getText().toString());

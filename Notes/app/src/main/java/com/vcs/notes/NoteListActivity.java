@@ -19,6 +19,7 @@ public class NoteListActivity extends AppCompatActivity {
 
 
     private ListView notesListView;
+    private ArrayAdapter<NoteInfo> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,7 @@ public class NoteListActivity extends AppCompatActivity {
 
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
 
-        ArrayAdapter<NoteInfo> adapter = new ArrayAdapter<>(
+        adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_list_item_1,
                 notes
@@ -64,4 +65,10 @@ public class NoteListActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        adapter.notifyDataSetChanged();
+    }
 }
