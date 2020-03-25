@@ -44,6 +44,10 @@ public final class NoteInfo implements Parcelable {
         this.text = text;
     }
 
+    public NoteInfo() {
+        // Default
+    }
+
 
     protected NoteInfo(Parcel parcel) {
         id = parcel.readInt();

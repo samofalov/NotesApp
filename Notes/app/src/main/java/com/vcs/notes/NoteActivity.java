@@ -39,13 +39,14 @@ public class NoteActivity extends AppCompatActivity {
         note = intent.getParcelableExtra(NOTE_INFO);
 
         isNewNote = (note == null);
-
-
     }
 
     private void setSpinnerInfo() {
         spinner = findViewById(R.id.spinner_course);
-        List<CourseInfo> courses = DataManager.getInstance().getCourses();
+
+        DatabaseHandler handler = new DatabaseHandler(this);
+
+        List<CourseInfo> courses = handler.getCourses();
 
         ArrayAdapter<CourseInfo> adapter = new ArrayAdapter<>(
                 this,
@@ -54,7 +55,7 @@ public class NoteActivity extends AppCompatActivity {
 
         spinner.setAdapter(adapter);
 
-        if(!isNewNote) {
+        if (!isNewNote) {
             int index = courses.indexOf(note.getCourse());
             spinner.setSelection(index);
         }
@@ -64,7 +65,7 @@ public class NoteActivity extends AppCompatActivity {
         title = findViewById(R.id.note_title);
         details = findViewById(R.id.note_detail);
 
-        if(!isNewNote) {
+        if (!isNewNote) {
             title.setText(note.getTitle());
             details.setText(note.getText());
         }
@@ -105,13 +106,34 @@ public class NoteActivity extends AppCompatActivity {
 
     private void saveNote() {
 
-        if(isNewNote) note = DataManager.getInstance().createNote();
+        DatabaseHandler handler = new DatabaseHandler(this);
 
-        note.setCourse((CourseInfo) spinner.getSelectedItem());
-        note.setTitle(title.getText().toString());
-        note.setText(details.getText().toString());
+        String selectedCourseTitle = ((CourseInfo) spinner.getSelectedItem()).getTitle();
+        String updatedTitle = title.getText().toString();
+        String updatedText = details.getText().toString();
 
-        DataManager.getInstance().updateNote(note);
+        if (isNewNote) {
+            note = new NoteInfo();
+
+            note.setCourse((CourseInfo) spinner.getSelectedItem());
+            note.setText(updatedText);
+            note.setTitle(updatedTitle);
+
+            handler.addNote(note);
+        } else if (!selectedCourseTitle.equals(note.getCourse().getTitle())
+                || !updatedTitle.equals(note.getTitle())
+                || !updatedText.equals(note.getText())) {
+
+            note.setCourse((CourseInfo) spinner.getSelectedItem());
+            note.setText(updatedText);
+            note.setTitle(updatedTitle);
+
+            handler.updateNote(note);
+
+            System.out.println("update executed");
+        } else {
+            System.out.println("update not executed");
+        }
     }
 
     private void sendEmail() {

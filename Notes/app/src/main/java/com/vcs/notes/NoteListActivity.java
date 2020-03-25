@@ -17,9 +17,10 @@ import java.util.List;
 
 public class NoteListActivity extends AppCompatActivity {
 
-
     private ListView notesListView;
     private ArrayAdapter<NoteInfo> adapter;
+    private List<NoteInfo> notes;
+    DatabaseHandler handler = new DatabaseHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,12 @@ public class NoteListActivity extends AppCompatActivity {
 
         notesListView = findViewById(R.id.note_list);
 
-        List<NoteInfo> notes = DataManager.getInstance().getNotes();
+        if(handler.getNotes().size() == 0){
+            handler.addCourses(DataManager.getInstance().getCourses());
+            handler.addNotes(DataManager.getInstance().getNotes());
+        }
+
+        notes = handler.getNotes();
 
         adapter = new ArrayAdapter<>(
                 this,
@@ -69,6 +75,8 @@ public class NoteListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        notes.clear();
+        notes.addAll(handler.getNotes());
         adapter.notifyDataSetChanged();
     }
 }
