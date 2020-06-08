@@ -40,7 +40,6 @@ public class NoteActivity extends AppCompatActivity {
 
         isNewNote = (note == null);
 
-
     }
 
     private void setSpinnerInfo() {
