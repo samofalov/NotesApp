@@ -42,6 +42,14 @@ public final class CourseInfo implements Parcelable {
         return courseId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public List<ModuleInfo> getModules() {
+        return modules;
+    }
+
     public ModuleInfo getModule(String moduleId) {
         for(ModuleInfo moduleInfo: modules) {
             if(moduleId.equals(moduleInfo.getModuleId()))
