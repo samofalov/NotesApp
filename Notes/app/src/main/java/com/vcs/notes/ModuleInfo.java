@@ -40,14 +40,6 @@ public final class ModuleInfo implements Parcelable  {
         return moduleId;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public boolean isComplete() {
-        return isComplete;
-    }
-
     public void setComplete(boolean complete) {
         isComplete = complete;
     }
