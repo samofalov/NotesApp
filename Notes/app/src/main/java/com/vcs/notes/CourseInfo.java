@@ -11,6 +11,10 @@ public final class CourseInfo implements Parcelable {
     private final String title;
     private final List<ModuleInfo> modules;
 
+    public CourseInfo(){
+        // Default constructor
+    }
+
     public CourseInfo(String courseId, String title, List<ModuleInfo> modules) {
         this.courseId = courseId;
         this.title = title;
